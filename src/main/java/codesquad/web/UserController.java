@@ -15,7 +15,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/users") // 대표 URL을 요청에 매핑
 public class UserController {
-    public static final String SESSION_NAME = "sessionedUser";
 
     @Autowired // Spring framework이 자동으로 인터페이스 - 객체 매핑을 해줍니다.
     private UserRepository userRepository;
@@ -29,7 +28,7 @@ public class UserController {
 
     @GetMapping("")
     public String list(Model model, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute(SESSION_NAME);
+        User sessionedUser = SessionUtil.getUser(session);
         if (sessionedUser == null) {
             model.addAttribute("users", userRepository.findAll());
             return "/user/list";
@@ -54,8 +53,8 @@ public class UserController {
     public String update(User user, HttpSession session) {
         User userOrigin = userRepository.findByUserId(user.getUserId());
         userOrigin.update(user);
-        session.removeAttribute(SESSION_NAME);
-        session.setAttribute(SESSION_NAME, userOrigin);
+        SessionUtil.removeUser(session);
+        SessionUtil.setUser(session, userOrigin);
         userRepository.save(userOrigin);
         return "redirect:/users";
     }
@@ -64,7 +63,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         Optional<User> optionalUser = userRepository.findByUserIdAndPassword(userId, password);
         if (User.isCorrectUser(optionalUser)) {
-            session.setAttribute(SESSION_NAME, optionalUser.get());
+            SessionUtil.setUser(session, optionalUser.get());
             return "redirect:/";
         }
         return "/user/login_failed";
@@ -73,7 +72,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute(SESSION_NAME);
+        SessionUtil.removeUser(session);
         return "redirect:/";
     }
 }

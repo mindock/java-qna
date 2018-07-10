@@ -50,11 +50,14 @@ public class Question {
         this.contents = contents;
     }
 
-    public void update(Question target) {
+    public void update(Question target) throws UserNotMatchException {
+        isWriter(target.getWriter());
         contents = target.getContents();
     }
 
-    public boolean isWriter(User user) {
-        return writer.equals(user);
+    public void isWriter(User user) throws UserNotMatchException {
+        if (!writer.equals(user)) {
+            throw new UserNotMatchException();
+        }
     }
 }

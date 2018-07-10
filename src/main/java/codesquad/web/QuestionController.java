@@ -12,21 +12,15 @@ import java.util.Optional;
 
 
 @Controller
-@RequestMapping({"/", "/questions"})
+@RequestMapping("/questions")
 public class QuestionController {
 
     @Autowired
     private QuestionRepository questionRepository;
 
-    @GetMapping("")
-    public String list(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
-        return "/index";
-    }
-
     @PostMapping("")
     public String create(Question question, HttpSession session) {
-        question.setWriter((User) session.getAttribute(UserController.SESSION_NAME));
+        question.setWriter(SessionUtil.getUser(session));
         questionRepository.save(question);
         return "redirect:/";
     }
@@ -44,33 +38,27 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, Question question, HttpSession session, Model model){
-        User user = getUser(session).orElseThrow(NullPointerException::new);
+    public String update(@PathVariable Long id, Question question, HttpSession session, Model model) throws UserNotMatchException {
+        User user = SessionUtil.getUser(session);
+        question.setWriter(user);
         Question questionOrigin = findById(id);
-        if (questionOrigin.isWriter(user)) {
-            questionOrigin.update(question);
-            questionRepository.save(questionOrigin);
-            return "redirect:/";
-        }
-        model.addAttribute("alert", new Alert("다른 사람의 글을 수정할 수 없습니다.", "/"));
-        return "/qna/alert";
+        questionOrigin.update(question);
+        questionRepository.save(questionOrigin);
+        return "redirect:/";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id, HttpSession session, Model model) {
-        User user = getUser(session).orElseThrow(NullPointerException::new);
+    public String delete(@PathVariable Long id, HttpSession session, Model model) throws UserNotMatchException {
+        User user = SessionUtil.getUser(session);
         Question questionOrigin = findById(id);
-        if (questionOrigin.isWriter(user)) {
-            questionRepository.delete(questionOrigin);
-            return "redirect:/";
-        }
-        model.addAttribute("alert", new Alert("다른 사람의 글을 삭제할 수 없습니다.", "/"));
-        return "/qna/alert";
+        questionOrigin.isWriter(user);
+        questionRepository.delete(questionOrigin);
+        return "redirect:/";
     }
 
     @GetMapping("/form")
     public String showForm(HttpSession session) {
-        getUser(session).orElseThrow(NullPointerException::new);
+        SessionUtil.getUser(session);
         return "qna/form";
     }
 
@@ -78,9 +66,5 @@ public class QuestionController {
         Optional<Question> questionOptional = questionRepository.findById(id);
         questionOptional.orElseThrow(() -> new IllegalArgumentException());
         return questionOptional.get();
-    }
-
-    private Optional<User> getUser(HttpSession session) {
-        return Optional.of((User) session.getAttribute(UserController.SESSION_NAME));
     }
 }
