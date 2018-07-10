@@ -9,9 +9,10 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min = 1)
-    @Column(nullable = false)
-    private String writer;
+
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
     @Size(min = 1)
     @Column(nullable = false)
     private String title;
@@ -21,7 +22,7 @@ public class Question {
     public Question() {
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
@@ -37,7 +38,7 @@ public class Question {
         return id;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -51,5 +52,9 @@ public class Question {
 
     public void update(Question target) {
         contents = target.getContents();
+    }
+
+    public boolean isWriter(User user) {
+        return writer.equals(user);
     }
 }

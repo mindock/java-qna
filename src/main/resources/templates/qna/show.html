@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html lang="kr">
-{{> include/head}}
-<body>
-{{> include/navigationBar}}
+{{#partial "content"}}
 <div class="container" id="main">
     <div class="col-md-12 col-sm-12 col-lg-12">
         <div class="panel panel-default">
@@ -18,7 +14,7 @@
                                  class="article-author-thumb" alt="">
                         </div>
                         <div class="article-header-text">
-                            <a href="/users/92/kimmunsu" class="article-author-name">{{writer}}</a>
+                            <a href="/users/92/kimmunsu" class="article-author-name">{{writer.userId}}</a>
                             <a href="/questions/413" class="article-header-time" title="퍼머링크">
                                 2015-12-30 01:47
                                 <i class="icon-link"></i>
@@ -159,7 +155,6 @@
         </div>
     </article>
 </script>
+{{/partial}}
 
-{{> include/commonJs}}
-</body>
-</html>
+{{> base}}
