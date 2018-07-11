@@ -1,4 +1,4 @@
-package codesquad.web;
+package codesquad.utils;
 
 import codesquad.domain.User;
 
