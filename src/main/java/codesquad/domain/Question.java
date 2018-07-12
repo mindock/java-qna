@@ -39,8 +39,14 @@ public class Question extends Post {
 
     public void removeAnswer(Long answerId, User user) {
         Answer answer = findAnswerById(answerId);
-        answer.validWriter(user);
-        answer.setDeleted(true);
+        answer.delete(user);
+    }
+
+    public void deleteQuestionAndAnswers(User sessionedUser) {
+        delete(sessionedUser);
+        for (Answer answer : answers) {
+            answer.delete(sessionedUser);
+        }
     }
 
     public List<Answer> listNotDeleted() {
@@ -53,13 +59,6 @@ public class Question extends Post {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void isPossibleDelete(User sessionedUser) {
-        validWriter(sessionedUser);
-        for (Answer answer : answers) {
-            answer.validWriter(sessionedUser);
-        }
     }
 
     @Override

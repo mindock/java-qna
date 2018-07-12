@@ -28,11 +28,7 @@ public class UserController {
     @GetMapping("")
     public String list(Model model, HttpSession session) {
         User sessionedUser = SessionUtil.getUser(session);
-        if (sessionedUser == null) {
-            model.addAttribute("users", userRepository.findAll());
-            return "/user/list";
-        }
-        model.addAttribute("users", userRepository.findByIdNot(sessionedUser.getId()));
+        model.addAttribute("users", userRepository.findAll());
         return "/user/list";
     }
 

@@ -36,6 +36,11 @@ public abstract class Post {
         contents = target.getContents();
     }
 
+    public void delete(User sessionedUser) {
+        validWriter(sessionedUser);
+        this.deleted = true;
+    }
+
     public User getWriter() {
         return writer;
     }
@@ -46,10 +51,6 @@ public abstract class Post {
 
     public boolean isDeleted() {
         return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 
     public Long getId() {

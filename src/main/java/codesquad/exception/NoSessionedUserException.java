@@ -6,6 +6,7 @@ public class NoSessionedUserException extends RuntimeException {
     public NoSessionedUserException() {
         this("no sessioned user");
     }
+
     public NoSessionedUserException(String msg) {
         super(msg);
     }

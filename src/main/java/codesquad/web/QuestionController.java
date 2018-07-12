@@ -56,9 +56,7 @@ public class QuestionController {
     public String delete(@PathVariable Long id, HttpSession session, Model model) {
         User user = SessionUtil.getUser(session);
         Question questionOrigin = findById(id);
-        questionOrigin.validWriter(user);
-        questionOrigin.isPossibleDelete(user);
-        questionOrigin.setDeleted(true);
+        questionOrigin.deleteQuestionAndAnswers(user);
         questionRepository.save(questionOrigin);
         return "redirect:/";
     }

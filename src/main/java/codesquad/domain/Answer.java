@@ -25,6 +25,7 @@ public class Answer extends Post {
         this.question = question;
     }
 
+
     @Override
     public void validWriter(User user) {
         if (isWriter(user)) {
