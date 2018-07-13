@@ -30,7 +30,7 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
-        Question question = findById(id);
+        Question question = findById(id, questionRepository);
         model.addAttribute("question", question);
         model.addAttribute("notDeletedAnswers", question.listNotDeleted());
         return "/qna/show";
@@ -38,7 +38,7 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String showUpdateForm(@PathVariable Long id, Model model) {
-        model.addAttribute("question", findById(id));
+        model.addAttribute("question", findById(id, questionRepository));
         return "/qna/updateForm";
     }
 
@@ -46,7 +46,7 @@ public class QuestionController {
     public String update(@PathVariable Long id, Question question, HttpSession session, Model model) {
         User user = SessionUtil.getUser(session);
         question.setWriter(user);
-        Question questionOrigin = findById(id);
+        Question questionOrigin = findById(id, questionRepository);
         questionOrigin.update(question);
         questionRepository.save(questionOrigin);
         return "redirect:/";
@@ -55,7 +55,7 @@ public class QuestionController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id, HttpSession session, Model model) {
         User user = SessionUtil.getUser(session);
-        Question questionOrigin = findById(id);
+        Question questionOrigin = findById(id, questionRepository);
         questionOrigin.deleteQuestionAndAnswers(user);
         questionRepository.save(questionOrigin);
         return "redirect:/";
@@ -67,7 +67,7 @@ public class QuestionController {
         return "qna/form";
     }
 
-    public Question findById(Long id) {
+    public static Question findById(Long id, QuestionRepository questionRepository) {
         Optional<Question> questionOptional = questionRepository.findById(id);
         questionOptional.orElseThrow(() -> new NullQuestionException());
         return questionOptional.get();

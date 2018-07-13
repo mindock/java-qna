@@ -13,6 +13,11 @@ public class Answer extends Post {
     public Answer() {
     }
 
+    public Answer(User writer, Question question, String contents){
+        super(writer, contents);
+        this.question = question;
+    }
+
     public Answer(boolean deleted) {
         super(deleted);
     }

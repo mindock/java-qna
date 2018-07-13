@@ -25,7 +25,7 @@ public class AnswerController {
     @PostMapping("")
     public String create(@PathVariable Long questionId, Answer answer, HttpSession session) {
         answer.setWriter(SessionUtil.getUser(session));
-        Question question = findById(questionId);
+        Question question = QuestionController.findById(questionId,questionRepository);
         question.addAnswer(answer);
         questionRepository.save(question);
         return "redirect:/questions/" + questionId;
@@ -34,15 +34,11 @@ public class AnswerController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         User user = SessionUtil.getUser(session);
-        Question question = findById(questionId);
+        Question question = QuestionController.findById(questionId,questionRepository);
         question.removeAnswer(id, user);
         questionRepository.save(question);
         return "redirect:/questions/" + questionId;
     }
 
-    public Question findById(Long id) {
-        Optional<Question> questionOptional = questionRepository.findById(id);
-        questionOptional.orElseThrow(() -> new NullQuestionException());
-        return questionOptional.get();
-    }
+
 }
