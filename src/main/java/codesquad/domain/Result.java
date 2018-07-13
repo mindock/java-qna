@@ -30,10 +30,4 @@ public class Result {
         this.id = id;
         return this;
     }
-
-
-    public Result fail(String message){
-        this.resultMessage = message;
-        return this;
-    }
 }
