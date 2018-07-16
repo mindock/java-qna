@@ -31,7 +31,7 @@ function appendAnswer({id, contents, question, writer}) {
     $(".qna-comment-slipp-articles")[0].insertAdjacentHTML("afterbegin", html);
 }
 
-function removeAnswer({id,resultMessage}) {
+function removeAnswer({id}) {
 
         $("#answer-"+id)[0].remove();
 }
@@ -84,8 +84,9 @@ function fetchManager({ url, method, body, headers, callback }) {
 
 function removeAnswerHandler(evt) {
     evt.preventDefault();
-    if(evt.target.className != "delete-answer-button") return ;
-    var url = evt.target.parentElement.action;
+    const target = evt.target;
+    if(target.className != "delete-answer-button") return ;
+    var url = target.parentElement.action;
     console.log(url)
     fetchManager({
         url: url,
