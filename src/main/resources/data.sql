@@ -1,3 +1,4 @@
+
 INSERT INTO USER (id, user_id, password, name, email) VALUES (1, 'p', 'a', '자바지기', 'javajigi@slipp.net');
 INSERT INTO USER (id, user_id, password, name, email) VALUES (2, 'a', 'a', '산지기', 'sanjigi@slipp.net');
 INSERT INTO QUESTION (id, writer_id, title, contents, deleted) VALUES (3, 1, '첫번째 제목', '첫번째 내용', false);

@@ -31,7 +31,6 @@ public class User {
     }
 
     public User() {
-
     }
 
     public Long getId() {
@@ -95,7 +94,6 @@ public class User {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, userId, password, name, email);
     }
 }

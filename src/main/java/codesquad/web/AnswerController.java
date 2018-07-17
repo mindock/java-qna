@@ -39,6 +39,4 @@ public class AnswerController {
         questionRepository.save(question);
         return "redirect:/questions/" + questionId;
     }
-
-
 }

@@ -2,13 +2,11 @@ package codesquad.domain;
 
 import codesquad.exception.NullAnswerException;
 import org.junit.Test;
-
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuestionTest {
-
     @Test
     public void listNotDeleted() {
         Question question = new Question();
